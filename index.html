@@ -382,7 +382,7 @@ function registerEgg(n){
   console.log("Egg trouvé :", n, "Total :", eggsFoundSet.size, "/", TOTAL_EGGS);
 
   if (eggsFoundSet.size === TOTAL_EGGS){
-    showMiniOverlay("🎉 10/10 easter eggs trouvés 🎉", "Ok… là t’as tout trouvé 😌💘 <br> Tu veux une récompense ?");
+    showUltimateReward();
   }
 }
 /* ============================================== */
@@ -1172,8 +1172,95 @@ setInterval(() => {
   }
 }, 800);
 
+function showUltimateReward(){
+  // évite doublon si jamais registerEgg est appelé 2 fois d'affilée
+  if(document.getElementById("ultimateOverlay")) return;
+
+  const overlay = document.createElement("div");
+  overlay.id = "ultimateOverlay";
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.zIndex = "999999";
+  overlay.style.background = "rgba(0,0,0,0.70)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(760px,92%);
+      background: rgba(255,105,135,0.22);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 26px;
+      padding: 28px 20px;
+      text-align:center;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 80px rgba(0,0,0,0.45);
+      position: relative;
+      overflow:hidden;
+    ">
+      <div style="font-size:44px; margin-bottom:6px;">🏆</div>
+      <h2 style="margin:0 0 10px 0; font-size:28px;">Récompense ultime débloquée</h2>
+      <p style="margin:0; line-height:1.65; font-size:19px;">
+        10/10… ok, t’es trop forte 😌<br><br>
+        Si t’es arrivée jusque-là, c’est que t’es curieuse…<br>
+        et moi j’ai juste envie de te dire un truc simple :<br><br>
+        <b>j’aime vraiment te faire sourire.</b>
+      </p>
+
+      <div style="margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button id="ultimateClose" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+
+      <div id="heartRain" style="position:absolute; inset:0; pointer-events:none;"></div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // ===== Pluie de coeurs INFINIE (safe) =====
+  const rain = overlay.querySelector("#heartRain");
+  const emojis = ["💖","💘","💗","💓","💕","💞"];
+
+  const heartInterval = setInterval(() => {
+    const heart = document.createElement("div");
+    heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    heart.style.position = "absolute";
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.top = "-10%";
+    heart.style.fontSize = (14 + Math.random()*24) + "px";
+    heart.style.opacity = (0.55 + Math.random()*0.4).toFixed(2);
+    heart.style.transform = `rotate(${(Math.random()*40-20).toFixed(1)}deg)`;
+    heart.style.transition = "top 3.2s linear, opacity 3.2s linear, transform 3.2s linear";
+
+    rain.appendChild(heart);
+
+    requestAnimationFrame(() => {
+      heart.style.top = "110%";
+      heart.style.opacity = "0";
+    });
+
+    setTimeout(() => heart.remove(), 3400);
+  }, 140);
+
+  // ===== Fermeture (stop pluie) =====
+  function closeUltimate(){
+    clearInterval(heartInterval);
+    overlay.remove();
+  }
+
+  overlay.querySelector("#ultimateClose").addEventListener("click", closeUltimate);
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) closeUltimate();
+  });
+}
+
+
 </script>
 </body>
 </html>
+
 
 
