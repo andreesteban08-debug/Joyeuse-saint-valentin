@@ -1140,7 +1140,7 @@ function showMiniOverlay(title, htmlText){
   const now = new Date();
   const h = now.getHours();
 
-  if(h >= 23){
+  if(h >= 23 || h <= 3){
     setTimeout(() => {
       registerEgg(8);
       showMiniOverlay("🌙 8eme easter egg trouvé 🌙", "T’es encore réveillée ?<br><br> J'espère que tu penses à moi.");
@@ -1175,4 +1175,5 @@ setInterval(() => {
 </script>
 </body>
 </html>
+
 
