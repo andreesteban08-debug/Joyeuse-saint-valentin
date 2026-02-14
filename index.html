@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Joyeuse Saint Valentin💘</title>
+  <link rel="stylesheet" href="style.css">
+
+
+  <style>
+    :root{
+      --card-bg: rgba(255, 255, 255, 0.18);
+      --card-border: rgba(255, 255, 255, 0.28);
+      --text: #ffffff;
+      --btn-bg: rgba(255,255,255,0.92);
+      --btn-text: #1b1b1b;
+      --btn-hover: rgba(255,255,255,1);
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+
+      /* ✅ Fond image */
+      background-image: url("fond-st-valentin.avif");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ✅ voile sombre/rose pour lisibilité */
+    body::before{
+      content:"";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,105,135,0.35), rgba(0,0,0,0.35));
+      backdrop-filter: blur(2px);
+      z-index: 0;
+    }
+
+    .wrap{
+      width: min(820px, 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card{
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 28px 22px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.25);
+    }
+
+    h1{
+      margin: 0 0 10px 0;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .subtitle{
+      text-align: center;
+      line-height: 1.55;
+      font-size: clamp(14px, 2.1vw, 18px);
+      opacity: 0.95;
+      margin: 8px 0 18px 0;
+      padding: 0 6px;
+    }
+
+    #lives{
+      text-align: center;
+      font-size: 20px;
+      margin: 12px 0 4px 0;
+      font-weight: 700;
+    }
+
+    .btnRow{
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button{
+      padding: 12px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      transition: transform .12s ease, background .12s ease;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+    }
+    button:hover{ background: var(--btn-hover); transform: translateY(-1px); }
+    button:active{ transform: translateY(1px) scale(0.99); }
+
+    .questionTitle{
+      margin: 18px 0 10px 0;
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .questionText{
+      text-align: center;
+      margin: 0 0 12px 0;
+      font-size: 17px;
+    }
+
+    #message{
+      text-align: center;
+      margin-top: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    .hidden{ display: none; }
+
+    /* ✅ Form caché tant que pas gagné */
+    #finalForm{ display: none; margin-top: 16px; }
+
+    .formCard{
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+
+    .radioLine{
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin: 12px 0 10px 0;
+      font-size: 16px;
+    }
+
+    .radioLine label{
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    input[type="radio"]{
+      transform: scale(1.1);
+      margin-right: 8px;
+    }
+
+    @media (max-width: 520px){
+      button{ width: 100%; max-width: 320px; }
+      .card{ padding: 22px 16px; }
+    }
+
+    /* ✅ Bouton discret en bas (tu peux choisir left ou right) */
+    #pinFab{
+      position: fixed;
+      bottom: 10px;
+      right: 12px;          /* mets left:12px; si tu le veux à gauche */
+      z-index: 50;
+      width: 44px;
+      height: 32px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.10);
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      font-size: 16px;
+      letter-spacing: 2px;
+      transition: opacity .15s ease, transform .15s ease, background .15s ease;
+      opacity: 0.35;
+    }
+    #pinFab:hover{
+      opacity: 0.75;
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.18);
+    }
+
+    /* ✅ Modal */
+    #pinModal.pinHidden{ display:none; }
+    #pinModal{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.55);
+      display: grid;
+      place-items: center;
+    }
+
+    .pinBox{
+      width: min(360px, 92%);
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .pinTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .pinTitle{ font-weight: 800; }
+    .pinClose{
+      border: none;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+
+    .pinDots{
+      margin-top: 10px;
+      text-align:center;
+      font-size: 22px;
+      letter-spacing: 6px;
+    }
+    .pinHint{
+      text-align:center;
+      opacity: 0.9;
+      margin: 8px 0 10px 0;
+    }
+
+    .pinPad{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .pinKey{
+      padding: 14px 0;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.92);
+      color: #1b1b1b;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .pinKey:hover{ transform: translateY(-1px); }
+    .pinKeyGhost{
+      background: rgba(255,255,255,0.18);
+      color: white;
+    }
+    /* 😈 Le "Non" peut se déplacer */
+    #noLabel{
+      position: relative;
+    }
+    #noLabel.runaway{
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    /* 🥚 4ème easter egg : mini coeur fantôme */
+    #cornerEgg{
+      position: fixed;
+      left: 10px;      /* mets right:10px et enlève left si tu le veux à droite */
+      bottom: 10px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,1);
+      opacity: 0.06;   /* quasi invisible */
+      z-index: 40;
+      cursor: pointer;
+    }
+    #cornerEgg:hover{
+      opacity: 0.18;   /* juste un tout petit indice si elle passe dessus */
+    }
+
+  </style>
+</head>
+<!-- 🔒 Digicode discret -->
+<button id="pinFab" aria-label="Accès secret">•••</button>
+
+<div id="pinModal" class="pinHidden" role="dialog" aria-modal="true">
+  <div class="pinBox">
+    <div class="pinTop">
+      <div class="pinTitle">Accès</div>
+      <button id="pinClose" class="pinClose" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="pinDots" id="pinDots">◦ ◦ ◦ ◦</div>
+    <div class="pinHint" id="pinHint">Tape le code</div>
+
+    <div class="pinPad">
+      <button class="pinKey" data-k="1">1</button>
+      <button class="pinKey" data-k="2">2</button>
+      <button class="pinKey" data-k="3">3</button>
+      <button class="pinKey" data-k="4">4</button>
+      <button class="pinKey" data-k="5">5</button>
+      <button class="pinKey" data-k="6">6</button>
+      <button class="pinKey" data-k="7">7</button>
+      <button class="pinKey" data-k="8">8</button>
+      <button class="pinKey" data-k="9">9</button>
+      <button class="pinKey pinKeyGhost" data-action="clear">C</button>
+      <button class="pinKey" data-k="0">0</button>
+      <button class="pinKey pinKeyGhost" data-action="back">⌫</button>
+    </div>
+  </div>
+</div>
+
+<div id="cornerEgg" aria-label="secret"></div>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+
+      <!-- ✅ ÉCRAN D’INTRO -->
+      <div id="intro">
+        <h1>💖 Pour <span id="summitText">mon sommet</span> ⛰️</h1>
+        <p class="subtitle">
+          À défaut de pouvoir t'offrir un bouquet de <span id="roseWord">roses</span>…
+          je t'offre ça.<br>
+          Si tu gagnes : invitation lundi après les cours, et cette fois c’est moi qui organise 😌<br>
+          (et si tu refuses je te kidnappe…)
+        </p>
+        <div class="btnRow">
+          <button onclick="startGame()">Prête ? 💘</button>
+        </div>
+      </div>
+
+      <!-- ✅ JEU (caché au départ) -->
+      <div id="gameArea" class="hidden">
+        <p id="lives">Vies restantes : ❤️❤️❤️</p>
+        <div id="game"></div>
+        <div id="message"></div>
+
+        <div id="finalForm" class="formCard">
+          <p style="margin:0 0 10px 0; text-align:center;">Veux-tu accepter mon invitation pour lundi soir ?</p>
+
+          <form action="https://formsubmit.co/andre.esteban.08@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="Réponse">
+
+            <div class="radioLine">
+              <label><input type="radio" name="reponse" value="Oui" required> Oui 💖</label>
+              <label id="noLabel"><input type="radio" name="reponse" value="Non" required> Non 😶</label>
+            </div>
+
+            <div class="btnRow">
+              <button type="submit">Envoyer ma réponse</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+let lives = 3;
+let stage = 1;
+
+/* ========= ✅ COMPTEUR EASTER EGGS (10) ========= */
+const TOTAL_EGGS = 10;
+const eggsFoundSet = new Set();
+
+function registerEgg(n){
+  if (eggsFoundSet.has(n)) return; // pas de doublons
+  eggsFoundSet.add(n);
+  console.log("Egg trouvé :", n, "Total :", eggsFoundSet.size, "/", TOTAL_EGGS);
+
+  if (eggsFoundSet.size === TOTAL_EGGS){
+    showMiniOverlay("🎉 10/10 easter eggs trouvés 🎉", "Ok… là t’as tout trouvé 😌💘 <br> Tu veux une récompense ?");
+  }
+}
+/* ============================================== */
+
+function startGame(){
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("gameArea").classList.remove("hidden");
+  renderStage();
+}
+
+function updateLives() {
+  let hearts = "";
+  for (let i = 0; i < lives; i++) hearts += "❤️";
+  document.getElementById("lives").innerHTML = "Vies restantes : " + hearts;
+}
+
+function gameOver() {
+  document.getElementById("game").innerHTML = "";
+  document.getElementById("message").innerHTML =
+    "Mission échouée.. Il faudra me supplier si tu veux sortir 🤷";
+}
+
+function loseLife() {
+  lives--;
+  updateLives();
+  if (lives <= 0) gameOver();
+}
+
+function showWinForm() {
+  document.getElementById("game").innerHTML = "";
+  document.getElementById("message").innerHTML = "Mission réussie 🎉";
+  document.getElementById("finalForm").style.display = "block";
+
+  // ✅ triple oui supprimé comme demandé
+  makeNoRunAway(); // 😈 ICI
+}
+
+
+function checkAnswer(correct) {
+  if (!correct) { loseLife(); return; }
+  stage++;
+  renderStage();
+}
+
+function renderStage() {
+  const game = document.getElementById("game");
+  document.getElementById("message").innerHTML = "";
+
+  if (stage === 1) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 1</div>
+      <div class="questionText">Quelle est ma couleur préférée ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">Blanc</button>
+        <button onclick="checkAnswer(false)">Magenta</button>
+        <button onclick="checkAnswer(false)">Bleu foncé</button>
+        <button onclick="checkAnswer(true)">Bleu cyan</button>
+        <button onclick="checkAnswer(false)">Beige</button>
+        <button onclick="checkAnswer(false)">Rose</button>
+        <button onclick="checkAnswer(false)">Marron</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 2) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 2</div>
+      <div class="questionText">Le paysage / destination que je préfère ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">La montagne</button>
+        <button onclick="checkAnswer(true)">La mer / l'océan</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 3) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 3</div>
+      <div class="questionText">Je préfère :</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(true)">La ville</button>
+        <button onclick="checkAnswer(false)">La campagne</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 4) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 4</div>
+      <div class="questionText">Ma destination de rêve ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">L'Espagne</button>
+        <button onclick="checkAnswer(true)">Le Japon</button>
+        <button onclick="checkAnswer(false)">La Chine</button>
+        <button onclick="checkAnswer(true)">Les États-Unis</button>
+        <button onclick="checkAnswer(false)">La Norvège</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 5) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 5</div>
+      <div class="questionText">Quelle est ma trilogie préférée ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(true)">Labyrinthe</button>
+        <button onclick="checkAnswer(false)">Hunger Games</button>
+        <button onclick="checkAnswer(true)">Star Wars</button>
+        <button onclick="checkAnswer(false)">Harry Potter</button>
+        <button onclick="checkAnswer(false)">Matrix</button>
+        <button onclick="checkAnswer(false)">Avatar</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 6) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 6</div>
+      <div class="questionText">Mon animal préféré ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">Le chien</button>
+        <button onclick="checkAnswer(false)">Le chat</button>
+        <button onclick="checkAnswer(true)">Le cachalot</button>
+        <button onclick="checkAnswer(false)">Le panda roux</button>
+        <button onclick="checkAnswer(false)">Le renard</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 7) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 7</div>
+      <div class="questionText">Mon plat préféré ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">Pâtes bolognaises</button>
+        <button onclick="checkAnswer(true)">Les sushis</button>
+        <button onclick="checkAnswer(false)">Les lasagnes</button>
+        <button onclick="checkAnswer(false)">La fondue savoyarde</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 8) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 8</div>
+      <div class="questionText">Ma saison préférée ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">L'automne</button>
+        <button onclick="checkAnswer(false)">L'hiver</button>
+        <button onclick="checkAnswer(false)">Le printemps</button>
+        <button onclick="checkAnswer(true)">L'été</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 9) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 9</div>
+      <div class="questionText">À quelle heure je me couche le plus souvent ?</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">23h</button>
+        <button onclick="checkAnswer(false)">0h00</button>
+        <button onclick="checkAnswer(false)">1h</button>
+        <button onclick="checkAnswer(true)">En même temps que toi</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 10) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 10</div>
+      <div class="questionText">Si on regarde un film, je choisis :</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(true)">Film romantique</button>
+        <button onclick="checkAnswer(true)">Film d’horreur</button>
+        <button onclick="checkAnswer(false)">Film d’action</button>
+        <button onclick="checkAnswer(true)">Je fais semblant mais je te laisse décider</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 11) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 11</div>
+      <div class="questionText">Ce que j’aime le plus chez toi :</div>
+      <div class="btnRow">
+        <button onclick="checkAnswer(false)">Ton humour</button>
+        <button onclick="checkAnswer(true)">Tout</button>
+        <button onclick="checkAnswer(false)">Ta personnalité</button>
+        <button onclick="checkAnswer(false)">Ton regard</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 12) {
+    game.innerHTML = `
+      <div class="questionTitle">Question 12</div>
+      <div class="questionText">Clique sur le bon coeur 💓</div>
+      <div class="btnRow">
+        <button onclick="loseLife()">💓</button>
+        <button onclick="checkAnswer(true)">💓</button>
+        <button onclick="loseLife()">💓</button>
+      </div>
+    `;
+  }
+
+  else if (stage === 13) {
+    showWinForm();
+  }
+}
+
+
+// 🔑 Choisis ton code ici (4 chiffres)
+const SECRET_PIN_LETTER = "1308";
+const SECRET_PIN_VALENTINE = "1402";
+const SECRET_PIN_DEBUG_23H = "2223";
+
+
+let pinBuffer = "";
+
+const pinFab = document.getElementById("pinFab");
+const pinModal = document.getElementById("pinModal");
+const pinClose = document.getElementById("pinClose");
+const pinDots = document.getElementById("pinDots");
+const pinHint = document.getElementById("pinHint");
+
+function openPin(){
+  pinBuffer = "";
+  renderDots();
+  pinHint.textContent = "Tape le code";
+  pinModal.classList.remove("pinHidden");
+}
+function closePin(){
+  pinModal.classList.add("pinHidden");
+}
+
+function renderDots(){
+  const filled = "●";
+  const empty = "◦";
+  const max = 4;
+  let out = [];
+  for(let i=0;i<max;i++){
+    out.push(i < pinBuffer.length ? filled : empty);
+  }
+  pinDots.textContent = out.join(" ");
+}
+
+function failPin(){
+  pinHint.textContent = "Nope 😏";
+  // petit shake
+  const box = pinModal.querySelector(".pinBox");
+  box.animate(
+    [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
+    {duration:220}
+  );
+  pinBuffer = "";
+  renderDots();
+}
+
+function successPin(){
+  closePin();
+  showSecretLoveNote(); // 👈 ta décla s’affiche
+}
+
+// Ouvre/Ferme
+pinFab.addEventListener("click", openPin);
+pinClose.addEventListener("click", closePin);
+pinModal.addEventListener("click", (e) => { if(e.target === pinModal) closePin(); });
+
+// Touche du clavier (optionnel)
+document.addEventListener("keydown", (e) => {
+  if (pinModal.classList.contains("pinHidden")) return;
+  if (e.key >= "0" && e.key <= "9") handleDigit(e.key);
+  if (e.key === "Backspace") backspace();
+  if (e.key === "Escape") closePin();
+});
+
+function handleDigit(d){
+  if(pinBuffer.length >= 4) return;
+
+  pinBuffer += d;
+  renderDots();
+
+  if(pinBuffer.length === 4){
+    if(pinBuffer === SECRET_PIN_LETTER){
+      registerEgg(10); // ✅ egg #10 (lettre)
+      closePin();
+      showSecretLoveNote(); // ✅ lettre
+    }
+    else if(pinBuffer === SECRET_PIN_VALENTINE){
+      registerEgg(7); // ✅ egg #7 (valentine)
+      closePin();
+      showValentinePop(); // ✅ valentine
+    }
+    else if(pinBuffer === SECRET_PIN_DEBUG_23H){
+      registerEgg(8); // ✅ valide l'egg 23h
+      closePin();
+      showMiniOverlay("🌙 8eme easter egg trouvé 🌙",
+        "Mode test activé 😏<br><br>On va faire comme s’il était tard...");
+    }
+    else {
+      failPin();
+    }
+  }
+}
+
+function backspace(){
+  pinBuffer = pinBuffer.slice(0, -1);
+  renderDots();
+}
+
+document.querySelectorAll(".pinKey").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const k = btn.getAttribute("data-k");
+    const action = btn.getAttribute("data-action");
+    if (k !== null) handleDigit(k);
+    if (action === "clear") { pinBuffer=""; renderDots(); pinHint.textContent="Tape le code"; }
+    if (action === "back") backspace();
+  });
+});
+
+// 💌 Ton message secret (overlay)
+function showSecretLoveNote(){
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.55)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(720px,92%);
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 20px;
+      padding: 22px 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      text-align:center;
+      backdrop-filter: blur(10px);
+      ">
+      <h2 style="margin:0 0 10px 0;">💌 10eme easter egg trouvé 💌 </h2>
+      <p style="margin:0; line-height:1.6; font-size:18px;">
+        Felicitations<br>
+        Je ne pensais pas que tu tomberais ici.<br><br>
+        Si tu lis ces lignes, c’est que ta curiosité a encore fait des merveilles.<br>
+        Je voulais simplement te dire quelque chose, <br>
+        Tu comptes beaucoup pour moi. Probablement plus que tu ne l’imagines.<br><br>
+        J’ai hésité à écrire une vraie déclaration ici… mais je te connais assez pour savoir que tu finirais par la trouver, et je ne suis pas sûr que tu sois prête à en recevoir une.<br>
+        Je sais que ton passé n’a pas toujours été simple.<br>
+        Je sais aussi que certaines choses laissent des traces et donnent parfois envie de te protéger, voire de t’éloigner avant que ça ne devienne trop réel.<br>
+        Et c’est normal.<br>
+        Ce que je veux, moi, c’est te rendre la plus heureuse possible.<br>
+        Je veux simplement être quelqu’un auprès de qui tu te sentes en sécurité, libre, et heureuse.<br><br>
+        Si ce que je fais peut parfois sembler “beaucoup”, sache que pour moi, ce n’est rien d’exceptionnel et que je suis capable de bien plus que ça pour tes yeux.<br>
+        C’est naturel. Parce que quand quelqu’un compte vraiment, on ne calcule pas.<br>
+        Je veux juste te prouver, à ma manière, que ce que tu mérites existe.<br>
+      </p>
+      <div style="margin-top:14px;">
+        <button id="closeSecret" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.querySelector("#closeSecret").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => { if(e.target === overlay) overlay.remove(); });
+}
+
+function showValentinePop(){
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.65)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(650px,92%);
+      background: rgba(255,105,135,0.22);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 22px;
+      padding: 26px 18px;
+      text-align:center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    ">
+      <h2 style="margin:0 0 10px 0;">💘 7ème easter egg trouvé 💘</h2>
+      <p style="margin:0; line-height:1.6; font-size:20px;">
+        Accepterais-tu d'être ma Valentine ?
+      </p>
+      <div style="margin-top:16px;">
+        <button id="closeVal" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.querySelector("#closeVal").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => { if(e.target === overlay) overlay.remove(); });
+}
+
+function makeNoRunAway(){
+  const formCard = document.getElementById("finalForm");
+  const noLabel = document.getElementById("noLabel");
+
+  if(!formCard || !noLabel) return;
+
+  formCard.style.position = "relative";
+
+  function jump(){
+    noLabel.style.position = "absolute";
+
+    const zone = formCard.getBoundingClientRect();
+    const b = noLabel.getBoundingClientRect();
+
+    const maxX = zone.width - b.width;
+    const maxY = zone.height - b.height;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noLabel.style.left = x + "px";
+    noLabel.style.top  = y + "px";
+  }
+
+  // Il ne bouge QUE quand on l'approche
+  noLabel.addEventListener("mouseenter", jump);
+  noLabel.addEventListener("mousemove", jump);
+}
+
+document.querySelector("h1").addEventListener("dblclick", function(){
+  registerEgg(1);
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.55)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(600px,90%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 24px;
+      text-align:center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    ">
+      <h3 style="margin:0 0 12px 0;">✨ 1er easter egg trouvé ✨</h3>
+      <p style="margin:0; line-height:1.6; font-size:18px;">
+        Ça fait bientôt quatre mois que tu occupes mes pensées bien plus que je ne voudrais l’admettre…<br><br>
+        Et apparemment, ça ne passe pas. Cela empire..
+      </p>
+      <div style="margin-top:16px;">
+        <button id="closeEgg" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#closeEgg").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) overlay.remove();
+  });
+
+});
+
+document.getElementById("roseWord").addEventListener("dblclick", function(){
+  registerEgg(2);
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.55)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(600px,90%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 24px;
+      text-align:center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    ">
+      <h3 style="margin:0 0 12px 0;">🌹 2ème easter egg trouvé 🌹</h3>
+      <p style="margin:0; line-height:1.6; font-size:18px;">
+        J’aimerais vraiment pouvoir t’en offrir un… genre un jour proche.<br><br>
+        Pas juste un bouquet pour faire joli,<br>
+        mais des roses que je te donnerais en vrai,<br>
+        avec tout ce que ça voudrait dire.
+      </p>
+      <div style="margin-top:16px;">
+        <button id="closeRoseEgg" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#closeRoseEgg").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) overlay.remove();
+  });
+
+});
+
+const startBtn = document.querySelector("#intro button");
+let holdTimer;
+
+startBtn.addEventListener("mousedown", () => {
+  holdTimer = setTimeout(() => {
+    registerEgg(3);
+
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(0,0,0,0.45)";
+    overlay.style.display = "grid";
+    overlay.style.placeItems = "center";
+    overlay.style.zIndex = "99999";
+
+    overlay.innerHTML = `
+      <div style="
+        width:min(500px,90%);
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 20px;
+        padding: 24px;
+        text-align:center;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      ">
+        <p style="margin:0; line-height:1.6; font-size:18px;">
+          <h3 style="margin:0 0 12px 0;">✨ 3eme easter egg trouvé ✨</h3>
+          Tu stresses ? 😌<br><br>
+          Ou c’est juste moi qui te fais un peu d’effet ?
+        </p>
+        <div style="margin-top:16px;">
+          <button id="closeHoldEgg" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+            Continuer 💘
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector("#closeHoldEgg").addEventListener("click", () => overlay.remove());
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay) overlay.remove();
+    });
+
+  }, 2000);
+});
+
+startBtn.addEventListener("mouseup", () => {
+  clearTimeout(holdTimer);
+});
+
+startBtn.addEventListener("mouseleave", () => {
+  clearTimeout(holdTimer);
+});
+
+document.getElementById("cornerEgg").addEventListener("click", () => {
+  registerEgg(4);
+
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.55)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(600px,90%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 24px;
+      text-align:center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    ">
+      <h3 style="margin:0 0 12px 0;">💫 4ème easter egg trouvé 💫</h3>
+      <p style="margin:0; line-height:1.6; font-size:18px;">
+        Petit secret :<br><br>
+        quand je te parle, j’ai souvent ce sourire bête que je fais semblant de cacher.
+      </p>
+      <div style="margin-top:16px;">
+        <button id="closeCornerEgg" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.querySelector("#closeCornerEgg").addEventListener("click", () => overlay.remove());
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) overlay.remove();
+  });
+});
+
+let summitTimer;
+
+document.getElementById("summitText").addEventListener("mouseenter", () => {
+  summitTimer = setTimeout(() => {
+    registerEgg(5);
+
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(0,0,0,0.55)";
+    overlay.style.display = "grid";
+    overlay.style.placeItems = "center";
+    overlay.style.zIndex = "99999";
+
+    overlay.innerHTML = `
+      <div style="
+        width:min(600px,90%);
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 20px;
+        padding: 24px;
+        text-align:center;
+        backdrop-filter: blur(10px);
+      ">
+        <h3>🫶 5ème easter egg trouvé 🫶</h3>
+        <p>
+          J’aimerais vraiment te tenir la main un jour.<br><br>
+          Juste pour marcher un peu plus près de toi.
+        </p>
+        <button id="closeHandEgg">Fermer</button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("#closeHandEgg").onclick = () => overlay.remove();
+    overlay.onclick = (e)=>{ if(e.target===overlay) overlay.remove(); };
+
+  }, 2000);
+});
+
+document.getElementById("summitText").addEventListener("mouseleave", () => {
+  clearTimeout(summitTimer);
+});
+
+let holdHugTimer;
+
+document.body.addEventListener("mousedown", () => {
+  holdHugTimer = setTimeout(() => {
+    registerEgg(6);
+
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(0,0,0,0.55)";
+    overlay.style.display = "grid";
+    overlay.style.placeItems = "center";
+    overlay.style.zIndex = "99999";
+
+    overlay.innerHTML = `
+      <div style="
+        width:min(600px,90%);
+        background: rgba(255,255,255,0.15);
+        border-radius: 20px;
+        padding: 24px;
+        text-align:center;
+        backdrop-filter: blur(10px);
+      ">
+        <h3>🫂 6ème easter egg trouvé 🫂</h3>
+        <p>
+          Si je pouvais, je te prendrais dans mes bras là tout de suite.<br><br>
+          Pas longtemps.<br>
+          Juste assez pour apprécier le moment. <br>
+          Mais sache que j'en ai vraiment envie.
+        </p>
+        <button id="closeHugEgg">Fermer</button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector("#closeHugEgg").onclick = () => overlay.remove();
+    overlay.onclick = (e)=>{ if(e.target===overlay) overlay.remove(); };
+
+  }, 3000);
+});
+
+document.body.addEventListener("mouseup", () => {
+  clearTimeout(holdHugTimer);
+});
+
+// ============ HELPERS (overlay rapide) ============
+function showMiniOverlay(title, htmlText){
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.55)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+    <div style="
+      width:min(600px,90%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 24px;
+      text-align:center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    ">
+      <h3 style="margin:0 0 12px 0;">${title}</h3>
+      <p style="margin:0; line-height:1.6; font-size:18px;">${htmlText}</p>
+      <div style="margin-top:16px;">
+        <button id="closeMini" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.querySelector("#closeMini").onclick = () => overlay.remove();
+  overlay.onclick = (e)=>{ if(e.target===overlay) overlay.remove(); };
+}
+
+// ============ 1) Heure tardive ============
+(function lateHourEgg(){
+  const now = new Date();
+  const h = now.getHours();
+
+  if(h >= 23){
+    setTimeout(() => {
+      registerEgg(8);
+      showMiniOverlay("🌙 8eme easter egg trouvé 🌙", "T’es encore réveillée ?<br><br> J'espère que tu penses à moi.");
+    }, 1200);
+  }
+})();
+
+// ============ 3) Console / F12 : “eh ne triche pas !” ============
+let devtoolsWarned = false;
+
+// Message direct en console (si elle ouvre, elle le verra)
+console.log("%cEh ne triche pas ! 😄", "font-size:16px; font-weight:700;");
+
+// Détection DevTools (pas parfait à 100%, mais ça marche souvent)
+setInterval(() => {
+  const threshold = 160;
+  const opened =
+    (window.outerWidth - window.innerWidth) > threshold ||
+    (window.outerHeight - window.innerHeight) > threshold;
+
+  if(opened && !devtoolsWarned){
+    devtoolsWarned = true;
+    registerEgg(9);
+    console.log("%cEh ne triche pas ! 😄", "font-size:16px; font-weight:700;");
+    showMiniOverlay("👀 9eme easter egg trouvé 👀", "Eh ne triche pas ! 😄");
+  }
+  if(!opened){
+    devtoolsWarned = false;
+  }
+}, 800);
+
+</script>
+</body>
+</html>
