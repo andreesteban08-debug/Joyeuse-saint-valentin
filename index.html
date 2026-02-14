@@ -599,6 +599,8 @@ function renderStage() {
 const SECRET_PIN_LETTER = "1308";
 const SECRET_PIN_VALENTINE = "1402";
 const SECRET_PIN_DEBUG_23H = "2223";
+const SECRET_PIN_HUGELOVE = "5084"; // change si tu veux
+
 
 
 let pinBuffer = "";
@@ -682,6 +684,10 @@ function handleDigit(d){
       closePin();
       showMiniOverlay("🌙 8eme easter egg trouvé 🌙",
         "Mode test activé 😏<br><br>On va faire comme s’il était tard...");
+    }
+    else if(pinBuffer === SECRET_PIN_HUGELOVE){
+      closePin();
+      showHugeLoveNote();
     }
     else {
       failPin();
@@ -1261,10 +1267,89 @@ function showUltimateReward(){
   });
 }
 
+function showHugeLoveNote(){
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.background = "rgba(0,0,0,0.72)";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.zIndex = "999999";
 
+  overlay.innerHTML = `
+    <div style="
+      width:min(900px,92%);
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 22px;
+      padding: 22px 18px;
+      text-align:center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 80px rgba(0,0,0,0.45);
+      max-height: 82vh;
+      overflow:auto;
+    ">
+      <h2 style="margin:0 0 10px 0;">💘</h2>
+
+      <p style="margin:0; line-height:1.7; font-size:18px;">
+        <b>Dernier secret.</b><br><br>
+
+        Je sais que j’ai déjà laissé passer plein de petites phrases, des sous-entendus, des trucs cachés…<br>
+        Mais là, j’ai envie d’arrêter de tourner autour.<br><br>
+
+        Depuis que je te connais, il y a un truc qui me marque :<br>
+        ta façon d’être.<br>
+        Ta douceur quand tu parles, même quand tu fais semblant d’être détachée.<br>
+        Ton intelligence, ton humour, et ce petit truc… qui te rend unique.<br><br>
+
+        Je ne sais pas exactement à quel moment ça a basculé,<br>
+        mais je sais que ça a pris de la place.<br>
+        Une place que je n’avais pas prévue de te laisser, et que je n’ai pas envie de récupérer.<br><br>
+
+        J’aime te voir sourire.<br>
+        J’aime quand tu t’intéresses à un détail, quand tu te laisses surprendre, quand tu es toi, simplement.<br>
+        Et j’aime l’idée que ce soit avec toi que je découvre tout ça.<br><br>
+
+        Je sais aussi que tu as vécu des choses qui font peur.<br>
+        Que parfois tu dois te protéger, que tu peux avoir envie de fuir avant même que ça commence vraiment.<br>
+        Et je ne te demanderai jamais d’être “parfaite”, ni d’aller plus vite que ce que tu ressens.<br><br>
+
+        Mais je veux que tu saches un truc très simple :<br>
+        avec moi, il n’y aura pas de jeu bizarre, pas de pression, pas de menace, pas de “tu dois”.<br>
+        Juste quelqu’un qui te respecte, qui t’écoute, et qui a envie de te faire du bien.<br><br>
+
+        Je ne te promets pas une histoire parfaite.<br>
+        Je te promets quelque chose de vrai.<br>
+        Quelque chose où tu peux être toi, sans te forcer.<br>
+        Et où je serai là, pas pour te retenir, mais pour te choisir.<br><br>
+
+        Si tu me laisses une petite place, même discrète,<br>
+        je la prendrai avec soin.<br>
+        Et je ferai en sorte que tu te sentes aimée comme tu le mérites.<br><br>
+
+        <b>Voilà.</b><br>
+        C’est la partie de moi que je n’arrive pas à dire à voix haute.<br>
+        Mais que j’avais besoin de te laisser quelque part, parce que tu comptes vraiment.<br><br>
+
+        <b>PS :</b> garde un peu de place dans ton sac lundi 🙏
+      </p>
+
+      <div style="margin-top:14px;">
+        <button id="closeHuge" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Fermer
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.querySelector("#closeHuge").onclick = () => overlay.remove();
+  overlay.onclick = (e)=>{ if(e.target === overlay) overlay.remove(); };
+}
 </script>
 </body>
 </html>
+
 
 
 
