@@ -599,7 +599,7 @@ function renderStage() {
 const SECRET_PIN_LETTER = "1308";
 const SECRET_PIN_VALENTINE = "1402";
 const SECRET_PIN_DEBUG_23H = "2223";
-//const SECRET_PIN_HUGELOVE = "5084"; // change si tu veux
+const SECRET_PIN_HUGELOVE = "5084"; // change si tu veux
 
 
 
@@ -685,10 +685,10 @@ function handleDigit(d){
       showMiniOverlay("🌙 8eme easter egg trouvé 🌙",
         "Mode test activé 😏<br><br>On va faire comme s’il était tard...");
     }
-    //else if(pinBuffer === SECRET_PIN_HUGELOVE){
-      //closePin();
-      //showHugeLoveNote();
-    //}
+    else if(pinBuffer === SECRET_PIN_HUGELOVE){
+      closePin();
+      showHugeLoveNote();
+    }
     else {
       failPin();
     }
@@ -1292,46 +1292,65 @@ function showHugeLoveNote(){
       <h2 style="margin:0 0 10px 0;">💘</h2>
 
       <p style="margin:0; line-height:1.7; font-size:18px;">
-        <b>Dernier secret.</b><br><br>
+        <b>❤️ Dernier secret ❤️</b><br><br>
 
-        Je sais que j’ai déjà laissé passer plein de petites phrases, des sous-entendus, des trucs cachés…<br>
-        Mais là, j’ai envie d’arrêter de tourner en rond.<br><br>
-
-        Depuis que je te connais, il y a un truc qui me marque :<br>
-        ta façon d’être.<br>
-        Ta douceur quand tu parles, même quand tu fais semblant d’être détachée.<br>
-        Ton intelligence, ton humour, et ce petit truc… qui te rend unique.<br><br>
-
-        Je ne sais pas exactement à quel moment ça a basculé,<br>
-        mais je sais que ça a pris de la place.<br>
-        Une place que je n’avais pas prévue de te laisser, et que je n’ai pas envie de récupérer.<br><br>
-
-        J’aime te voir sourire.<br>
-        J’aime quand tu t’intéresses à un détail, quand tu te laisses surprendre, quand tu es toi, simplement.<br>
-        Et j’aime l’idée que ce soit avec toi que je découvre tout ça.<br><br>
-
-        Je sais aussi que tu as vécu des choses qui font peur.<br>
-        Que parfois tu dois te protéger, que tu peux avoir envie de fuir avant même que ça commence vraiment.<br>
-        Et je ne te demanderai jamais d’être “parfaite”, ni d’aller plus vite que ce que tu ressens.<br><br>
-
-        Mais je veux que tu saches un truc très simple :<br>
-        avec moi, il n’y aura pas de jeu bizarre, pas de pression, pas de menace, pas de “tu dois”.<br>
-        Juste quelqu’un qui te respecte, qui t’écoute, et qui souhaite ton bonheur.<br><br>
-
+        Je sais que j'ai déjà laissé passer plein de petites phrases, des sous-entendus, des trucs cachés…<br>
+        Mais pour une fois, j'ai envie d'arrêter de tourner en rond.<br><br>
+        
+        Depuis le premier jour où je t'ai aperçue, il y a ce ressenti qui m'a marqué :<br>
+        Ta façon d'être.<br>
+        Ta force, ton humour exceptionnel, ta personnalité, ton regard, tes expressions, tes mimiques, ta voix, la façon dont les choses ont évolué entre nous et la manière dont on se cachait les choses si subtilement.<br><br>
+        
+        Je ne sais pas exactement à quel moment précis ça a basculé,<br>
+        mais je sais que ta place est maintenant là, et ce depuis un bon moment.<br>
+        Et je ne souhaite jamais qu'elle disparaisse.<br><br>
+        
+        J'aime te voir sourire, te voir rire et te voir vibrer.<br>
+        J'aime quand tu t'intéresses à un détail, quand tu te laisses surprendre, ou simplement quand tu es toi.<br>
+        J'aime quand tu proposes de sortir, quand tu fais des sous-entendus, ou quand tu provoques.<br>
+        J'aime ce que tu es, et ce que certains n'ont jamais réussi à voir.<br><br>
+        
+        Cette déclaration ne serait rien sans son paragraphe de compliments, de tout ce que je rêve de te dire depuis le départ.<br>
+        Il fallait donc bien que je prenne un moment pour parler de toi comme tu le mérites vraiment. Alors le voici :<br><br>
+        
+        Il y a chez toi quelque chose de rare, qui me déboussole.<br>
+        Tu es lumineuse, naturelle, évidente, et complètement rayonnante.<br><br>
+        
+        Ta détermination m'impressionne énormément. Ta force aussi. Pas seulement celle de la sportive incroyable que tu es, même si, franchement, tu es impressionnante !<br>
+        Mais cette force plus discrète, intérieure, celle qui te fait avancer, te dépasser, et ne jamais abandonner. Je t'admire pour ça, genre vraiment beaucoup.<br><br>
+        
+        Et puis il y a ton style ! Cette manière que tu as de porter les choses, de te tenir, de bouger. Tu es élégante, charmante, mignonne, irrésistible et juste magnifique.<br>
+        Ton regard, tes expressions, tes mimiques… TOUT.<br><br>
+        
+        Et au-delà de tout ça, il y a la personne que tu es. Ta sensibilité, ton humour, ta manière de ressentir les choses intensément. Tu es profondément belle, pas seulement à voir, mais à comprendre, à découvrir, et à admirer.<br>
+        Si je devais résumer en une phrase : tu es le genre de personne qui marque une vie, celle qui a marqué la mienne à tout jamais.<br><br>
+        
+        Je sais que tu ressens ce besoin de te protéger vis-à-vis de moi, que tu as cette envie de fuir avant même que tout commence vraiment.<br>
+        Et même si cela m'affecte un peu, car j'ai parfois l'impression de devenir indifférent à tes yeux ou que tout bascule d'un jour à l'autre,<br>
+        sache que je ne te demanderai jamais d'être "parfaite", bien que tu le sois déjà, ni d'aller plus vite que ce que tu ressens. Je m'ouvre à toi en te faisant part de ce que je ressens réellement pour toi, en espérant que tu arrives à voir toute la bienveillance et l'amour que j'aimerais t'offrir.<br>
+        Car cela fait bien longtemps que tu as dépassé le stade de simple crush…<br><br>
+        
+        Je veux donc que tu saches un truc très simple :<br>
+        avec moi, il n'y aura pas de jeu bizarre, pas de pression, pas de menace, pas de "tu dois".<br>
+        J'essaierai toujours de te surprendre, même avec la plus petite des attentions, pour que tu ne t'ennuies jamais.<br>
+        Jamais de doute, de crainte ni de peur. Je ne te cacherai pas aux yeux du monde, et je ne te cacherai jamais rien.<br>
+        Juste quelqu'un qui te respecte, qui t'écoute, et qui souhaite ton bonheur.<br><br>
+        
         Je ne te promets pas une histoire parfaite.<br>
         Je te promets quelque chose de vrai.<br>
         Quelque chose où tu peux être toi, sans te forcer.<br>
-        Et où je serai là, pas pour te retenir, mais pour te choisir.<br><br>
-
+        Et où je serai là, pas pour te retenir, mais pour te choisir. Te voir évoluer, échouer et recommencer. Te pousser vers le haut, mais jamais vers le bas.<br><br>
+        
         Si tu me laisses une petite place, même discrète,<br>
         je la prendrai avec soin.<br>
-        Et je ferai en sorte que tu te sentes aimée comme tu le mérites.<br><br>
+        Et je ferai en sorte que tu te sentes aimée comme tu le mérites, et comme tu l'as toujours mérité.<br><br>
+        
+        🥰 Voilà 🥰<br><br>
+        
+        C'est la partie de moi que je n'ose pas te dire à voix haute.<br>
+        Mais que j'avais quand même besoin d'exprimer, parce que tu comptes vraiment.
 
-        <b>Voilà.</b><br>
-        C’est la partie de moi que je n’arrive pas à dire à voix haute.<br>
-        Mais que j’avais besoin de te laisser quelque part, parce que tu comptes vraiment.<br><br>
-
-        <b>PS :</b> garde un peu de place dans ton sac lundi 🙏
+        <b>PS :</b> Désolé de t'avoir fait patienter et perdre patience 🙏
       </p>
 
       <div style="margin-top:14px;">
@@ -1349,6 +1368,7 @@ function showHugeLoveNote(){
 </script>
 </body>
 </html>
+
 
 
 
