@@ -685,10 +685,6 @@ function handleDigit(d){
       showMiniOverlay("🌙 8eme easter egg trouvé 🌙",
         "Mode test activé 😏<br><br>On va faire comme s’il était tard...");
     }
-    else if(pinBuffer === SECRET_PIN_HUGELOVE){
-      closePin();
-      showHugeLoveNote();
-    }
     else {
       failPin();
     }
@@ -1179,7 +1175,6 @@ setInterval(() => {
 }, 800);
 
 function showUltimateReward(){
-  // évite doublon si jamais registerEgg est appelé 2 fois d'affilée
   if(document.getElementById("ultimateOverlay")) return;
 
   const overlay = document.createElement("div");
@@ -1209,21 +1204,79 @@ function showUltimateReward(){
       <p style="margin:0; line-height:1.65; font-size:19px;">
         10/10… t’es trop forte 🫶<br><br>
         J'espère que tu as bien aimé ce petit jeu et que tu y as pris plaisir ! Perso j'ai adoré le faire 🤗<br>
-        J'avoue, j'ai changé d'avis, tu as réussi à terminer ça alors il fallait une récompense à la hauteur non ?<br>
-        La première récompense est qu'il se cache un dernier code secret dans le digicode.. et oui.. Celui ci est aléatoire,
-        car il contient une grande décla contenant toutes les choses que je revais de te dire mais que je n'ai jamais osé. <br>
-        Alors si ça se trouve il ne sera jamais ouvert, ou alors le destin fera que tu arriveras à le trouver 🫠 (ne m'en veut pas trop) <br>
-        Tu vas te dire que j'avais mis le mot "récompense" au pluriel ? Ne t'inquiètes pas, ça arrivera plus vite que tu ne le crois. <br><br>
+        J'avoue, j'ai changé d'avis, tu as réussi à terminer ça alors il fallait une récompense à la hauteur non ?<br><br>
         <b>PS : garde un peu de place dans ton sac lundi 🙏</b>
       </p>
 
       <div style="margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button id="ultimateSecretBtn" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
+          Entrer le code secret 🔒
+        </button>
         <button id="ultimateClose" style="padding:12px 18px;border:none;border-radius:14px;cursor:pointer;">
           Fermer
         </button>
       </div>
 
       <div id="heartRain" style="position:absolute; inset:0; pointer-events:none;"></div>
+
+      <!-- ✅ Digicode du 10/10 (caché au départ) -->
+      <div id="ultPinModal" style="
+        position:absolute; inset:0;
+        display:none;
+        place-items:center;
+        background: rgba(0,0,0,0.55);
+      ">
+        <div id="ultPinBox" style="
+          width:min(360px,92%);
+          background: rgba(255,255,255,0.14);
+          border: 1px solid rgba(255,255,255,0.22);
+          border-radius: 18px;
+          padding: 14px;
+          box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+          backdrop-filter: blur(8px);
+        ">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div style="font-weight:800;">Accès</div>
+            <button id="ultPinClose" style="
+              border:none; background: rgba(255,255,255,0.18);
+              color:white; border-radius:12px; padding:8px 10px; cursor:pointer;
+            ">✕</button>
+          </div>
+
+          <div id="ultPinDots" style="margin-top:10px; text-align:center; font-size:22px; letter-spacing:6px;">
+            ◦ ◦ ◦ ◦
+          </div>
+          <div id="ultPinHint" style="text-align:center; opacity:0.9; margin: 8px 0 10px 0;">
+            Tape le code
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:8px;">
+            ${[1,2,3,4,5,6,7,8,9].map(n=>`
+              <button class="ultKey" data-k="${n}" style="
+                padding:14px 0; border:none; border-radius:14px; cursor:pointer;
+                background: rgba(255,255,255,0.92); color:#1b1b1b;
+                font-size:18px; font-weight:700;
+              ">${n}</button>
+            `).join("")}
+
+            <button class="ultKeyGhost" data-action="clear" style="
+              padding:14px 0; border:none; border-radius:14px; cursor:pointer;
+              background: rgba(255,255,255,0.18); color:white; font-size:18px; font-weight:700;
+            ">C</button>
+
+            <button class="ultKey" data-k="0" style="
+              padding:14px 0; border:none; border-radius:14px; cursor:pointer;
+              background: rgba(255,255,255,0.92); color:#1b1b1b;
+              font-size:18px; font-weight:700;
+            ">0</button>
+
+            <button class="ultKeyGhost" data-action="back" style="
+              padding:14px 0; border:none; border-radius:14px; cursor:pointer;
+              background: rgba(255,255,255,0.18); color:white; font-size:18px; font-weight:700;
+            ">⌫</button>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
@@ -1236,7 +1289,6 @@ function showUltimateReward(){
   const heartInterval = setInterval(() => {
     const heart = document.createElement("div");
     heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
     heart.style.position = "absolute";
     heart.style.left = Math.random() * 100 + "%";
     heart.style.top = "-10%";
@@ -1244,7 +1296,6 @@ function showUltimateReward(){
     heart.style.opacity = (0.55 + Math.random()*0.4).toFixed(2);
     heart.style.transform = `rotate(${(Math.random()*40-20).toFixed(1)}deg)`;
     heart.style.transition = "top 3.2s linear, opacity 3.2s linear, transform 3.2s linear";
-
     rain.appendChild(heart);
 
     requestAnimationFrame(() => {
@@ -1260,10 +1311,79 @@ function showUltimateReward(){
     clearInterval(heartInterval);
     overlay.remove();
   }
-
   overlay.querySelector("#ultimateClose").addEventListener("click", closeUltimate);
-  overlay.addEventListener("click", (e) => {
-    if(e.target === overlay) closeUltimate();
+  overlay.addEventListener("click", (e) => { if(e.target === overlay) closeUltimate(); });
+
+  // ===== ✅ Digicode 10/10 =====
+  const ultPinModal = overlay.querySelector("#ultPinModal");
+  const ultPinClose = overlay.querySelector("#ultPinClose");
+  const ultPinDots  = overlay.querySelector("#ultPinDots");
+  const ultPinHint  = overlay.querySelector("#ultPinHint");
+  const ultPinBox   = overlay.querySelector("#ultPinBox");
+
+  let ultBuffer = "";
+
+  function renderUltDots(){
+    const filled = "●", empty = "◦", max = 4;
+    const out = [];
+    for(let i=0;i<max;i++) out.push(i < ultBuffer.length ? filled : empty);
+    ultPinDots.textContent = out.join(" ");
+  }
+
+  function openUltPin(){
+    ultBuffer = "";
+    renderUltDots();
+    ultPinHint.textContent = "Tape le code";
+    ultPinModal.style.display = "grid";
+  }
+
+  function closeUltPin(){
+    ultPinModal.style.display = "none";
+  }
+
+  function failUltPin(){
+    ultPinHint.textContent = "🌞 Essaie encore mon sunshine 🌞";
+    ultPinBox.animate(
+      [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
+      {duration:220}
+    );
+    ultBuffer = "";
+    renderUltDots();
+  }
+
+  function backUlt(){
+    ultBuffer = ultBuffer.slice(0,-1);
+    renderUltDots();
+  }
+
+  function handleUltDigit(d){
+    if(ultBuffer.length >= 4) return;
+    ultBuffer += d;
+    renderUltDots();
+
+    if(ultBuffer.length === 4){
+      if(ultBuffer === SECRET_PIN_HUGELOVE){
+        closeUltPin();
+        showHugeLoveNote();
+      } else {
+        failUltPin();
+      }
+    }
+  }
+
+  overlay.querySelector("#ultimateSecretBtn").addEventListener("click", openUltPin);
+  ultPinClose.addEventListener("click", closeUltPin);
+  ultPinModal.addEventListener("click", (e)=>{ if(e.target === ultPinModal) closeUltPin(); });
+
+  overlay.querySelectorAll(".ultKey").forEach(btn=>{
+    btn.addEventListener("click", ()=> handleUltDigit(btn.getAttribute("data-k")));
+  });
+  overlay.querySelectorAll(".ultKeyGhost").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const action = btn.getAttribute("data-action");
+      if(action === "clear"){ ultBuffer=""; renderUltDots(); ultPinHint.textContent="Tape le code"; }
+      if(action === "back") backUlt();
+    });
   });
 }
 
@@ -1368,6 +1488,7 @@ function showHugeLoveNote(){
 </script>
 </body>
 </html>
+
 
 
 
